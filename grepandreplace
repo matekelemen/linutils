@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+echo -e "\e[1;31m Replacing '$2' with '$3' in $PWD/$1 \e[0m"
+
+# Collect files
+targets=$(grep -rl $2 $1)
+
+for target in $targets
+do
+    echo -e "\e[1;35m $target \e[0m"
+    sed -i "s|$2|$3|g" $target
+done
+
+#find $PWD/$1 -type f -exec sed -i 's/$2/$3/g' {} \;

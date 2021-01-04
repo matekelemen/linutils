@@ -1,0 +1,1 @@
+nvidia-smi -q --id=0 | grep -i "Product name" | cut -d : -f2 | sed 's/\s//'

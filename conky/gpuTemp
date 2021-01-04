@@ -1,0 +1,1 @@
+nvidia-smi -q --id=0 --display=TEMPERATURE | grep -i "GPU Current" | cut -d":" -f2 | cut -d C -f1 | sed 's/\s//'

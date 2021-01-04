@@ -1,0 +1,1 @@
+nvidia-smi -q --id=0 --display=UTILIZATION | grep Memory | grep % | cut -d : -f2 | cut -d % -f1 | sed 's/\s//'

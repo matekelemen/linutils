@@ -1,0 +1,1 @@
+grep model /proc/cpuinfo | cut -d : -f2 | tail -1 | sed 's/\s//'
