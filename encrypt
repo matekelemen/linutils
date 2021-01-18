@@ -1,0 +1,64 @@
+#!/bin/bash
+
+set -e
+
+# Get target and source directories
+sourceDirectory="$(dirname $(realpath $1))"
+targetDirectory="$(dirname $(realpath $2))"
+currentDirectory="$PWD"
+
+sourceName="$(basename "$1")"
+sourceName="$sourceDirectory/$sourceName"
+
+targetName="$(basename "$2")"
+targetName="$targetDirectory/$targetName"
+
+# Define compressed output name and check whether it exists
+compressedName="$sourceName.zip"
+
+if [ -d "$compressedName" ] || [ -f "$compressedName" ]; then
+    echo -e "\e[1;31m '$compressedName' already exists! \e[0m"
+    exit
+fi
+
+# Define encoded name and check whether it exists
+encodedName=$targetName
+
+if [ -d "$encodedName" ] || [ -f "$encodedName" ]; then
+    echo -e "\e[1;31m '$encodedName' already exists! \e[0m"
+    exit
+fi
+
+# Collect files
+fileNames=()
+directory=""
+
+if [ -d "$1" ]; then
+    fileNames+=$(ls "$1/")
+    directory=$(realpath $1)
+elif [ -f "$1" ]; then
+    fileNames+=$(basename "$1")
+    directory="$sourceDirectory"
+else
+    echo -e "\e[1;31m '$1' does not exist \e[0m"
+    exit
+fi
+
+# Convert paths
+cd $sourceDirectory
+files=()
+for file in $fileNames
+do
+    files+=( $(realpath --relative-to=$PWD "$directory/$file") )
+done
+
+# Compress and encode
+zip -r $compressedName ${files[@]}
+cd $targetDirectory
+
+gpg -c --no-symkey-cache --cipher-algo AES256 --output $encodedName $compressedName
+
+# Remove intermediate files
+rm $compressedName
+
+echo -e "\e[1;31m Generated password protected $encodedName \e[0m"
