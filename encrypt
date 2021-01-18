@@ -3,8 +3,8 @@
 set -e
 
 # Get target and source directories
-sourceDirectory="$(dirname $(realpath $1))"
-targetDirectory="$(dirname $(realpath $2))"
+sourceDirectory="$(dirname $(realpath "$1"))"
+targetDirectory="$(dirname $(realpath "$2"))"
 currentDirectory="$PWD"
 
 sourceName="$(basename "$1")"
@@ -29,33 +29,18 @@ if [ -d "$encodedName" ] || [ -f "$encodedName" ]; then
     exit
 fi
 
-# Collect files
-fileNames=()
-directory=""
+# Compress
+cd $sourceDirectory
 
 if [ -d "$1" ]; then
-    fileNames+=$(ls "$1/")
-    directory=$(realpath $1)
+    zip -r $compressedName $(basename "$1")/*
 elif [ -f "$1" ]; then
-    fileNames+=$(basename "$1")
-    directory="$sourceDirectory"
-else
-    echo -e "\e[1;31m '$1' does not exist \e[0m"
-    exit
+    zip -r $compressedName $(basename "$1")
 fi
 
-# Convert paths
-cd $sourceDirectory
-files=()
-for file in $fileNames
-do
-    files+=( $(realpath --relative-to=$PWD "$directory/$file") )
-done
-
-# Compress and encode
-zip -r $compressedName ${files[@]}
 cd $targetDirectory
 
+# Encode
 gpg -c --no-symkey-cache --cipher-algo AES256 --output $encodedName $compressedName
 
 # Remove intermediate files
