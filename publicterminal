@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+#usage: PS1=$(publicterminal)
+echo -e "\e[38;2;100;255;100mmate@mate\e[0m:\e[38;2;100;100;255m~\e[0m$ "
