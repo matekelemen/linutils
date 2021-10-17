@@ -1,0 +1,79 @@
+#! /bin/bash
+
+sudo pacman -Syu
+
+# System
+sudo pacman -S      \
+     snapd          \
+     yay            \
+     rxvt-unicode
+
+# Software development - general
+sudo pacman -S      \
+    git             \
+    cmake           \
+    base-devel      \
+    ccache          \
+    gcc             \
+    valgrind        \
+    gdb             \
+    expect          \
+    zip             \
+    unzip
+
+sudo pacman -S      \
+    smplayer        \
+    youtube-dl
+
+sudo systemctl enable --now snapd.socket
+sudo ln -s /var/lib/snapd/snap /snap
+sudo snap install telegram-desktop discord spotify
+sudo snap install code --classic
+
+# KratosMultiphysics
+sudo pacman -S      \
+     gnupg          \
+     clang          \
+     openmp         \
+     openmpi        \
+     intel-mkl      \
+     boost          \
+     hdf5           \
+     metis
+
+
+yay -S trilinos --sudoloop
+
+# Sources
+cd $HOME
+mkdir git build
+
+cd git
+git clone https://github.com/matekelemen/bash.git
+git clone https://github.com/matekelemen/CiE.git --recursive
+git clone gttps://github.com/KratosMultiphysics/kratos.git --recursive
+
+python3 bash/install.py $HOME/bin --config_prefix $HOME
+
+# Python
+cd $HOME
+mkdir python_venv
+cd python_venv
+
+mkdir default
+source python_venv/bin/activate
+python3 -m pip install  \
+    scipy               \
+    numpy               \
+    matplotlib          \
+    vispy
+
+# Append PYTHONPATH
+sitePackagesDir=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+echo "$HOME/build/kratos/Debug/install" >> $sitePackagesDir/pythonpath.pth
+echo "$HOME/git/CiE/build/Debug/install/modules" >> $sitePackagesDir/pythonpath.pth
+deactivate
+cd $HOME
+
+# Append PATH
+echo "export PATH=$PATH:$HOME/bin" >> .zshrc
