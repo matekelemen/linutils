@@ -4,31 +4,30 @@ sudo pacman -Syu
 
 # System
 sudo pacman -S      \
-     snapd          \
      yay            \
      rxvt-unicode
 
 # Software development - general
 sudo pacman -S      \
-    git             \
-    cmake           \
-    base-devel      \
-    ccache          \
-    gcc             \
-    valgrind        \
-    gdb             \
-    expect          \
-    zip             \
-    unzip
+     git            \
+     cmake          \
+     base-devel     \
+     ccache         \
+     gcc            \
+     valgrind       \
+     gdb            \
+     expect         \
+     zip            \
+     unzip          \
+     code
 
-sudo pacman -S      \
-    smplayer        \
-    youtube-dl
+sudo pacman -S          \
+     smplayer           \
+     yt-dlp             \
+     telegram-desktop   \
+     discord            \
+     spotifyd
 
-sudo systemctl enable --now snapd.socket
-sudo ln -s /var/lib/snapd/snap /snap
-sudo snap install telegram-desktop discord spotify
-sudo snap install code --classic
 
 # KratosMultiphysics
 sudo pacman -S      \
@@ -41,12 +40,11 @@ sudo pacman -S      \
      hdf5           \
      metis
 
-
 yay -S trilinos --sudoloop
 
 # Sources
 cd $HOME
-mkdir git build
+mkdir -p git build
 
 cd git
 git clone https://github.com/matekelemen/bash.git
@@ -57,10 +55,10 @@ python3 bash/install.py $HOME/bin --config_prefix $HOME
 
 # Python
 cd $HOME
-mkdir python_venv
+mkdir -p python_venv
 cd python_venv
 
-mkdir default
+mkdir -p default
 source python_venv/bin/activate
 python3 -m pip install  \
     scipy               \

@@ -1,0 +1,12 @@
+{
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "editor.minimap.enabled": false,
+    "editor.detectIndentation": false,
+    "editor.renderWhitespace": "all",
+    "explorer.confirmDelete": false,
+    "python.venvPath": "~/python_venv",
+    "python.venvFolders": [
+        "~/python_venv"
+    ],
+    "files.trimTrailingWhitespace": true
+}
