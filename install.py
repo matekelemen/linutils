@@ -27,8 +27,9 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--overwrite",
-        type=bool,
+        action="store_const",
         default=False,
+        const=True,
         help="overwrite existing files during installation"
     )
 
