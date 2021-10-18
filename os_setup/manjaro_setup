@@ -1,5 +1,6 @@
 #! /bin/bash
 
+cd $HOME
 sudo pacman -Syu
 
 # System
@@ -30,6 +31,7 @@ sudo pacman -S          \
 
 
 # KratosMultiphysics
+# hdf5 is installed by trilinos
 sudo pacman -S      \
      gnupg          \
      clang          \
@@ -37,10 +39,10 @@ sudo pacman -S      \
      openmpi        \
      intel-mkl      \
      boost          \
-     hdf5           \
      metis
 
-yay -S trilinos --sudoloop
+
+sudo yay -S trilinos --sudoloop
 
 # Sources
 cd $HOME
@@ -58,8 +60,8 @@ cd $HOME
 mkdir -p python_venv
 cd python_venv
 
-mkdir -p default
-source python_venv/bin/activate
+python3 -m venv default
+source default/bin/activate
 python3 -m pip install  \
     scipy               \
     numpy               \
@@ -73,5 +75,6 @@ echo "$HOME/git/CiE/build/Debug/install/modules" >> $sitePackagesDir/pythonpath.
 deactivate
 cd $HOME
 
-# Append PATH
+# Edit shell config
+echo "alias ll=\"ls -l\"" >> .zshrc
 echo "export PATH=$PATH:$HOME/bin" >> .zshrc
