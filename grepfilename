@@ -2,11 +2,11 @@
 
 set -e
 
-searchDirectory=$PWD/$1
+searchDirectory="$PWD/$1"
 
 echo -e "\e[1;31m Listing pattern '$2' in '$searchDirectory' \e[0m"
 
-hits=$(find $searchDirectory | grep $2)
+hits=$(find $searchDirectory | grep "$2")
 
 for hit in $hits
 do
