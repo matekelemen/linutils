@@ -24,10 +24,8 @@ sudo pacman -S      \
 
 sudo pacman -S          \
      smplayer           \
-     yt-dlp             \
      telegram-desktop   \
-     discord            \
-     spotifyd
+     discord
 
 
 # KratosMultiphysics
@@ -42,7 +40,11 @@ sudo pacman -S      \
      metis
 
 
-sudo yay -S trilinos --sudoloop
+sudo yay -S         \
+     trilinos       \
+     yt-dlp         \
+     spotify        \
+     --sudoloop
 
 # Sources
 cd $HOME
