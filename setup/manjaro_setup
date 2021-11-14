@@ -51,11 +51,11 @@ cd $HOME
 mkdir -p git build
 
 cd git
-git clone https://github.com/matekelemen/bash.git
+git clone https://github.com/matekelemen/linutils.git
 git clone https://github.com/matekelemen/CiE.git --recursive
 git clone gttps://github.com/KratosMultiphysics/kratos.git --recursive
 
-python3 bash/install.py $HOME/bin --config_prefix $HOME
+python3 linutils/install.py $HOME/bin --config_prefix $HOME
 
 # Python
 cd $HOME
@@ -83,4 +83,4 @@ echo "export PATH=$PATH:$HOME/bin" >> .zshrc
 
 # Costumize KDE
 lookandfeeltool -a org.manjaro.breath2-2021-dark.desktop
-$HOME/bin/kdebackground $HOME/git/bash/background/keqing_wallpaper_custom.png
+$HOME/bin/kdebackground $HOME/git/linutils/background/keqing_wallpaper_custom.png

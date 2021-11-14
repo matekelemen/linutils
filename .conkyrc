@@ -80,7 +80,7 @@ ${color grey}Running:$color $alignr $running_processes
 # CPU
 #
 ${font sans-serif:bold:size=15}CPU ${hr 2}${font sans-serif:bold:size=10}
-${color grey}${execp ~/bash/conky/cpuName}$color
+${color grey}${execp ~/linutils/conky/cpuName}$color
 ${color grey}Frequency:$color $alignr $freq_g GHz
 ${color grey}Temperature:$color $alignr ${hwmon 4 temp 1} C
 ${color grey}Load:$color $alignr $cpu%
@@ -89,10 +89,10 @@ ${cpugraph}
 # GPU
 #
 ${font sans-serif:bold:size=15}GPU ${hr 2}${font sans-serif:bold:size=10}
-${color grey}${execp ~/bash/conky/gpuName}$color
-${color grey}Load:$color $alignr ${execp ~/bash/conky/gpuUsage} %
-${color grey}Memory:$color $alignr ${execp ~/bash/conky/gpuMemory} %
-${color grey}Temperature:$color $alignr ${execp ~/bash/conky/gpuTemp} C
+${color grey}${execp ~/linutils/conky/gpuName}$color
+${color grey}Load:$color $alignr ${execp ~/linutils/conky/gpuUsage} %
+${color grey}Memory:$color $alignr ${execp ~/linutils/conky/gpuMemory} %
+${color grey}Temperature:$color $alignr ${execp ~/linutils/conky/gpuTemp} C
 #
 # MEMORY
 #
