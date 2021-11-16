@@ -1,8 +1,8 @@
  #!/bin/bash
 
-SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-SOURCE_DIR="$(dirname "$SCRIPT_DIR")"
-UTILS_DIR="$SOURCE_DIR/utils"
+THIS_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(dirname "$THIS_DIR")"
+UTILS_DIR="$SCRIPT_DIR/utils"
 
 mkdir -p $HOME/python_venv
 cd $HOME/python_venv

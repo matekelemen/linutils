@@ -1,3 +1,5 @@
+#!/bin/python3
+
 # --- STL Imports ---
 import pathlib
 import argparse
@@ -7,23 +9,31 @@ import shutil
 # Get source directory
 thisScript = pathlib.Path(__file__).absolute()
 sourceDir  = thisScript.parent
+scriptDir  = sourceDir / "scripts"
+configDir  = sourceDir / "config"
 
 # CLI
 parser     = argparse.ArgumentParser(description="Install shell scripts")
 parser.add_argument(
-    "install_prefix",
+    "installPrefix",
+    metavar="install_prefix",
     type=str,
+    nargs='?',
+    default=str(pathlib.Path.home() / "bin"),
     help="destination directory for executable scripts"
 )
 
 parser.add_argument(
-    "--config_prefix",
+    "-c",
+    "--config-prefix",
+    dest="configPrefix",
     type=str,
     default=str(pathlib.Path.home()),
-    help="destination directory for configuration files (should be $HOME)"
+    help="destination directory for configuration files ($HOME by default)"
 )
 
 parser.add_argument(
+    "-y",
     "--overwrite",
     action="store_const",
     default=False,
@@ -35,48 +45,54 @@ parser.add_argument(
 arguments = parser.parse_args(sys.argv[1:])
 
 # Make sure destination directories exist
-installDir = pathlib.Path(arguments.install_prefix).absolute()
-configDir  = pathlib.Path(arguments.config_prefix).absolute()
+scriptInstallDir = pathlib.Path(arguments.installPrefix).absolute()
+configInstallDir = pathlib.Path(arguments.configPrefix).absolute()
 
-installDir.mkdir(parents=True, exist_ok=True)
-configDir.mkdir(parents=True, exist_ok=True)
+scriptInstallDir.mkdir(parents=True, exist_ok=True)
+configInstallDir.mkdir(parents=True, exist_ok=True)
 
-# Print what actions will be taken
-print("Copying scripts from {} to:".format(sourceDir))
+def copyFile(source: pathlib.Path, destination: pathlib.Path):
+    if destination.is_dir():
+        raise FileExistsError("{} is a directory".format(destination))
 
-messages = (
-    (arguments.install_prefix, "(executable scripts)"),
-    (arguments.config_prefix, "(configuration files)")
-)
+    if destination.is_file():
+        print("{} exists ".format(destination), end='')
 
-alignLength = max((len(arguments.install_prefix), len(arguments.config_prefix)))
-for message in messages:
-    print("  {:<{alignLength}} {:<}".format(*message, alignLength=alignLength))
+        if arguments.overwrite:
+            print("(overwriting)")
+            shutil.copy(str(item), str(destination))
+        else:
+            print("(skipping)")
+    else:
+        shutil.copy(str(item), str(destination))
 
 # Copy scripts
-for item in sourceDir.glob("*"):
-    if item.is_file() and item != thisScript:
-
-        # Config file definition:
-        #   - hidden (begins with '.')
-        #   - ends with 'rc'
+for item in scriptDir.glob("*"):
+    if item.is_file():
         name = str(item.name)
-        destination = pathlib.Path()
-        if name.startswith('.') and name.endswith('rc'):
-            destination = configDir / name
+        destination = scriptInstallDir / name
+        copyFile(item, destination)
+
+# Copy config files
+configProperties = {
+    "vscode_settings.json" : {
+        "destinationDirectory" : pathlib.Path.home() / ".config" / "Code - OSS" / "User",
+        "name" : "settings.json"
+    },
+    "default" : {
+        "destinationDirectory" : configInstallDir,
+        "name" : ""
+    }
+}
+
+for item in configDir.glob("*"):
+    if item.is_file():
+        name = str(item.name)
+        if name in configProperties:
+            properties = configProperties[name]
         else:
-            destination = installDir / name
+            properties = configProperties["default"]
+            properties["name"] = name
 
-        if destination.is_dir():
-            raise RuntimeError("{} is a directory".format(destination))
-
-        if destination.is_file():
-            print("{} exists ".format(destination), end='')
-
-            if arguments.overwrite:
-                print("(overwriting)")
-                shutil.copy(str(item), str(destination))
-            else:
-                print("(skipping)")
-        else:
-            shutil.copy(str(item), str(destination))
+        destination = properties["destinationDirectory"] / properties["name"]
+        copyFile(item, destination)
