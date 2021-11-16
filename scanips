@@ -7,7 +7,7 @@ fi
 
 for range in $ranges; do
     for i in {1..254}; do
-        (ping $range.$i -c 1 -w 5  >/dev/null && echo "192.168.0.$i" &) ;
+        (ping $range.$i -c 1 -w 5  >/dev/null && echo "$range.$i" &) ;
     done
 done
 

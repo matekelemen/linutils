@@ -1,0 +1,32 @@
+ #!/bin/bash
+
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SOURCE_DIR="$(dirname "$SCRIPT_DIR")"
+UTILS_DIR="$SOURCE_DIR/utils"
+
+mkdir -p $HOME/python_venv
+cd $HOME/python_venv
+
+if [ -d opencv ]; then
+    source opencv/bin/activate
+else
+    python3 -m venv opencv
+fi
+
+python3 -m pip install opencv-python opencv-contrib-python
+deactivate
+
+cd opencv
+curl -Lo "FSRCNN_x2.pb" "https://github.com/Saafke/FSRCNN_Tensorflow/raw/6a4812c4ef1c4f5947d79beafa32a05a6eb4a94d/models/FSRCNN_x2.pb"
+curl -Lo "FSRCNN_x3.pb" "https://github.com/Saafke/FSRCNN_Tensorflow/raw/6a4812c4ef1c4f5947d79beafa32a05a6eb4a94d/models/FSRCNN_x3.pb"
+curl -Lo "FSRCNN_x4.pb" "https://github.com/Saafke/FSRCNN_Tensorflow/raw/6a4812c4ef1c4f5947d79beafa32a05a6eb4a94d/models/FSRCNN_x4.pb"
+curl -Lo "EDSR_x2.pb" "https://github.com/Saafke/EDSR_Tensorflow/raw/06c7bd65b0305c2955328f8f2721ea86c341f660/models/EDSR_x2.pb"
+curl -Lo "EDSR_x3.pb" "https://github.com/Saafke/EDSR_Tensorflow/raw/06c7bd65b0305c2955328f8f2721ea86c341f660/models/EDSR_x3.pb"
+curl -Lo "EDSR_x4.pb" "https://github.com/Saafke/EDSR_Tensorflow/raw/06c7bd65b0305c2955328f8f2721ea86c341f660/models/EDSR_x4.pb"
+
+for item in ".upscale" "upscale"; do
+    if [ -f "$HOME/bin/$item" ] || [ -d "$HOME/bin/$item" ]; then
+        rm -rf "$HOME/bin/$item"
+    fi
+    cp "$UTILS_DIR/$item" "$HOME/bin/$item"
+done

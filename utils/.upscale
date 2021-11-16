@@ -1,0 +1,215 @@
+#!/bin/python3
+
+# --- External Imports ---
+import cv2
+
+# --- STL Imports ---
+import os
+import pathlib
+
+
+class Model:
+    def __init__(self, name: str, scale: int):
+        self.name  = name.lower()
+        self.scale = scale
+        self._path  = pathlib.Path.home() / "python_venv" / "opencv" / "{name}_x{scale}.pb".format(name=self.name.upper(), scale=self.scale)
+
+
+    @property
+    def path(self):
+        if not self._path.is_file():
+            raise FileNotFoundError("Missing model weights: {}".format(self._path))
+        return self._path
+
+
+
+
+class UpScaler:
+    _models = [
+        Model("fsrcnn", 2),
+        Model("fsrcnn", 3),
+        Model("fsrcnn", 4),
+        Model("edsr", 2),
+        Model("edsr", 3),
+        Model("edsr", 4)
+    ]
+
+
+    def __init__(self,
+                 modelName: str,
+                 scale: int,
+                 overwrite = False):
+        self.model = self._findModel(modelName, scale)
+        self.net = cv2.dnn_superres.DnnSuperResImpl_create()
+        self.overwrite = overwrite
+
+        self.net.readModel(str(self.model.path))
+        self.net.setModel(self.model.name, self.model.scale)
+
+
+    @staticmethod
+    def listSupportedModels(printFunction=lambda _: None, names=True, scales=True, delimiter='\n') -> str:
+        modelMap = {}
+        for model in UpScaler._models:
+            if not model.name in modelMap:
+                modelMap[model.name] = []
+            modelMap[model.name].append(model.scale)
+
+        message = ""
+        for key, value in modelMap.items():
+            if names:
+                message += key
+            if scales:
+                message += str(scales)
+            message += delimiter
+
+        message = message[:-1]
+        printFunction(message)
+        return message
+
+
+    def _findModel(self, name: str, scale: int) -> Model:
+        model = None
+
+        for supportedModel in self._models:
+            if supportedModel.name == name and supportedModel.scale == scale:
+                model = supportedModel
+                break
+
+        if model == None:
+            raise RuntimeError("Model '{name}' with scale {scale} is not supported\nAvailable models:\n{supportedModels}".format(
+                name = name,
+                scale = scale,
+                supportedModels = self.listSupportedModels()
+            ))
+
+        return model
+
+
+    def __call__(self, inputFilePath: pathlib.Path, outputFilePath: pathlib.Path) -> None:
+        if not isinstance(inputFilePath, pathlib.Path):
+            inputFilePath = pathlib.Path(inputFilePath)
+
+        if not isinstance(outputFilePath, pathlib.Path):
+            outputFilePath = pathlib.Path(outputFilePath)
+
+        # Check input / output paths
+        if not inputFilePath.is_file():
+            if inputFilePath.is_dir():
+                raise FileExistsError('{} is a directory'.format(inputFilePath))
+            else:
+                raise FileNotFoundError("'{}' does not exist".format(inputFilePath))
+
+        if outputFilePath.is_dir():
+            raise FileExistsError("Output '{}' is a directory".format(outputFilePath))
+        elif outputFilePath.is_file():
+            if self.overwrite:
+                os.remove(outputFilePath)
+            else:
+                FileExistsError("Output '{}' already exists".format(outputFilePath))
+
+        # Upscale
+        image    = cv2.imread(str(inputFilePath))
+        upscaled = self.net.upsample(image)
+        cv2.imwrite(str(outputFilePath), upscaled)
+
+
+
+
+if __name__ == "__main__":
+
+    # --- STL Imports ---
+    import argparse
+    import sys
+
+
+    parser = argparse.ArgumentParser(prog="upscale")
+
+    parser.add_argument(
+        "inputFiles",
+        metavar = "input",
+        type = str,
+        nargs = '*',
+        help = "paths to the input images"
+    )
+
+    parser.add_argument(
+        "-o",
+        "--output",
+        metavar = "output",
+        dest = "outputFiles",
+        type = str,
+        nargs = '*',
+        help = "output image paths"
+    )
+
+    parser.add_argument(
+        "-s",
+        "--scale",
+        metavar = "scale",
+        dest = "scale",
+        type = int,
+        default = 2,
+        help = "output scale (>1)"
+    )
+
+    parser.add_argument(
+        "-m",
+        "--model",
+        metavar = "model",
+        dest = "modelName",
+        type = str,
+        default = "fsrcnn",
+        help = "model type (available types: {})".format(UpScaler.listSupportedModels(scales=False,delimiter=','))
+    )
+
+    parser.add_argument(
+        "-y",
+        dest = "overwrite",
+        action="store_true",
+        help = "overwrite output files"
+    )
+
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        dest = "verbose",
+        action = "store_true",
+        help = "print progress"
+    )
+
+    arguments = parser.parse_args(sys.argv[1:])
+
+    # Default output paths
+    if not arguments.outputFiles:
+        arguments.outputFiles = []
+        for filePath in arguments.inputFiles:
+            inputFilePath = pathlib.Path(filePath).absolute()
+            inputDirectory = inputFilePath.parent
+
+            outputFileName = "{stem}_x{scale}{extension}".format(
+                stem = inputFilePath.stem,
+                scale = arguments.scale,
+                extension = inputFilePath.suffix
+            )
+            arguments.outputFiles.append(inputDirectory / outputFileName)
+
+    # Check input / output
+    if len(arguments.inputFiles) != len(arguments.outputFiles):
+        raise RuntimeError("Number of inputs ({}) does not match the number of outputs ({})".format(
+            len(arguments.inputFiles),
+            len(arguments.outputFiles)
+        ))
+
+    # Construct scaler
+    scaler = UpScaler(
+        arguments.modelName,
+        arguments.scale,
+        overwrite = arguments.overwrite
+    )
+
+    # Upscale images
+    for inputFilePath, outputFilePath in zip(arguments.inputFiles, arguments.outputFiles):
+        if arguments.verbose:
+            print("Writing to {}".format(outputFilePath))
+        scaler(inputFilePath, outputFilePath)
