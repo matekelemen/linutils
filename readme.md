@@ -1,11 +1,11 @@
 # linutils
 
-A collection of convenience (mostly shell) scripts that make life easier. Some work on their own, but most require a system that was set up using scripts in ```setup```.
+A collection of convenience (mostly shell) scripts that make life easier. Some work on their own, but most require a system that was set up using scripts in ```scripts/setup```.
 
 
 ## OS Setup
 
-Scripts in the ```setup``` directory automate basic stuff I do on every fresh install: they install packages I use often and create a home structure I'm used to:
+Scripts in the ```scripts/setup``` directory automate basic stuff I do on every fresh install: they install packages I use often and create a home structure I'm used to:
 ```
 $HOME
 |    .gitcredentials.gpg (a gpg-encrypted .gitcredentials file containing your tokens to GitHub/etc.)
@@ -28,7 +28,7 @@ OS setup scripts created for:
 
 ## Installation
 
-Ideally, this repo gets installed when running a script from ```setup```, but if you want to manually install it, run ```install.py``` and specify a directory on your PATH. Global config files get copied to ```$HOME``` by default, but you can specify a different destination with ```--config_prefix```. Existing files won't get overridden unless you set ```--overwrite```.
+Ideally, this repo gets installed when running an OS setup script from ```scripts/setup```, but if you want to manually install it, run ```install.py``` and specify a directory on your PATH. Global config files get copied to ```$HOME``` by default, but you can specify a different destination with ```-c``` (```--config-prefix```). Existing files won't get overridden unless you set ```-y```.
 
 ## Scripts
 
@@ -40,6 +40,10 @@ Ideally, this repo gets installed when running a script from ```setup```, but if
 - [```install.py```](https://github.com/matekelemen/linutils/blob/master/install.py) : installs other scripts in this repo to ```$1```.
 - [```kdebackground```](https://github.com/matekelemen/linutils/blob/master/kdebackground) : set the background on KDE Plasma 5 to ```$1```.
 - [```loadenv.sh```](https://github.com/matekelemen/linutils/blob/master/loadenv.sh) : ```source``` this script to load a virtual python environment from ```$HOME/python_venv```. ```default``` gets loaded if you don't specify an argument.
-- [```scanlocalips```](https://github.com/matekelemen/linutils/blob/master/scanlocalips) : ```echo``` every active IP address in ```192.168.0.XXX```. Great for finding your raspberry or realizing that your phone's battery died.
+- [```scanips```](https://github.com/matekelemen/linutils/blob/master/scanlocalips) : ```echo``` every active IP address in ```192.168.0.XXX```. Great for finding your raspberry or realizing that your phone's battery died. Alternatively, you can pass ranges to scan.
 - [```sizeof```](https://github.com/matekelemen/linutils/blob/master/sizeof) : ```echo``` the total size of a file/directory
 - [```togif```](https://github.com/matekelemen/linutils/blob/master/togif) : ```$1``` video ==> ```$2``` gif
+
+## Utilities
+
+- ```upscale```: upscale images (setup with ```scripts/setup/opencv_setup```)
