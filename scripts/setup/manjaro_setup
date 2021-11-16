@@ -55,7 +55,7 @@ git clone https://github.com/matekelemen/linutils.git
 git clone https://github.com/matekelemen/CiE.git --recursive
 git clone gttps://github.com/KratosMultiphysics/kratos.git --recursive
 
-python3 linutils/install.py $HOME/bin --config_prefix $HOME
+python3 linutils/install.py
 
 # Python
 cd $HOME
