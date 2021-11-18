@@ -7,11 +7,11 @@ UTILS_DIR="$SCRIPT_DIR/utils"
 mkdir -p $HOME/python_venv
 cd $HOME/python_venv
 
-if [ -d opencv ]; then
-    source opencv/bin/activate
-else
+if ! [ -d opencv ]; then
     python3 -m venv opencv
 fi
+
+source opencv/bin/activate
 
 python3 -m pip install opencv-python opencv-contrib-python
 deactivate
