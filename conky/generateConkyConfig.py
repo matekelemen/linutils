@@ -1,30 +1,6 @@
--- vim: ts=4 sw=4 noet ai cindent syntax=lua
---[[
-Conky, a system monitor, based on torsmo
+import os
 
-Any original torsmo code is licensed under the BSD license
-
-All code written since the fork of torsmo is licensed under the GPL
-
-Please see COPYING for details
-
-Copyright (c) 2004, Hannu Saransaari and Lauri Hakkarainen
-Copyright (c) 2005-2012 Brenden Matthews, Philip Kovacs, et. al. (see AUTHORS)
-All rights reserved.
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-]]
-
+contents = R"""
 conky.config = {
 	update_interval = 2.0,
 	xinerama_head=1,
@@ -80,19 +56,19 @@ ${color grey}Running:$color $alignr $running_processes
 # CPU
 #
 ${font sans-serif:bold:size=15}CPU ${hr 2}${font sans-serif:bold:size=10}
-${color grey}${execp ~/linutils/conky/cpuName}$color
+${color grey}${execp ~/git/linutils/conky/cpuName}$color
 ${color grey}Frequency:$color $alignr $freq_g GHz
-${color grey}Temperature:$color $alignr ${hwmon 4 temp 1} C
+${color grey}Temperature:$color $alignr ${hwmon pch_skylake temp 1} C
 ${color grey}Load:$color $alignr $cpu%
 ${cpugraph}
 #
 # GPU
 #
 ${font sans-serif:bold:size=15}GPU ${hr 2}${font sans-serif:bold:size=10}
-${color grey}${execp ~/linutils/conky/gpuName}$color
-${color grey}Load:$color $alignr ${execp ~/linutils/conky/gpuUsage} %
-${color grey}Memory:$color $alignr ${execp ~/linutils/conky/gpuMemory} %
-${color grey}Temperature:$color $alignr ${execp ~/linutils/conky/gpuTemp} C
+${color grey}${execp ~/git/linutils/conky/gpuName}$color
+${color grey}Load:$color $alignr ${execp ~/git/linutils/conky/gpuUsage} %
+${color grey}Memory:$color $alignr ${execp ~/git/linutils/conky/gpuMemory} %
+${color grey}Temperature:$color $alignr ${execp ~/git/linutils/conky/gpuTemp} C
 #
 # MEMORY
 #
@@ -103,24 +79,21 @@ ${color grey}Swap:$color ${goto 75} $swap/$swapmax ${goto 250} $swapperc% ${goto
 # FILE SYSTEM
 #
 ${font sans-serif:bold:size=15}FILE SYSTEM ${hr 2}${font sans-serif:bold:size=10}
-${color grey}/ ${goto 225} $color${fs_used /}/${fs_size /} ${goto 350}${fs_bar 4 /}
-${if_existing /media/mate/linux_hdd}\
-${color grey}/media/mate/linux_hdd $color ${goto 225} ${fs_used /media/mate/linux_hdd}/${fs_size /media/mate/linux_hdd} ${goto 350}${fs_bar 4 /media/mate/linux_hdd}\
+${color grey}/ ${goto 225} $color${fs_used /}/${fs_size /} ${goto 385}${fs_bar 4 /}
+${if_existing /run/media/mate/linux_hdd}\
+${color grey}linux_hdd $color ${goto 225} ${fs_used /run/media/mate/linux_hdd}/${fs_size /run/media/mate/linux_hdd} ${goto 385}${fs_bar 4 /run/media/mate/linux_hdd}\
 ${endif}
-${if_existing /media/mate/windows_ssd}\
-${color grey}/media/mate/windows_ssd $color ${goto 225} ${fs_used /media/mate/windows_ssd}/${fs_size /media/mate/windows_ssd} ${goto 350}${fs_bar 4 /media/mate/windows_ssd}\
-${endif}
-${if_existing /media/mate/windows_hdd}\
-${color grey}/media/mate/windows_hdd $color ${goto 225} ${fs_used /media/mate/windows_hdd}/${fs_size /media/mate/windows_hdd} ${goto 350}${fs_bar 4 /media/mate/windows_hdd}\
+${if_existing /run/media/mate/windows_hdd}\
+${color grey}windows_hdd $color ${goto 225} ${fs_used /run/media/mate/windows_hdd}/${fs_size /run/media/mate/windows_hdd} ${goto 385}${fs_bar 4 /run/media/mate/windows_hdd}\
 ${endif}
 #
 # NETWORK
 #
 ${font sans-serif:bold:size=15}NETWORK ${hr 2}${font sans-serif:bold:size=10}
-${color grey}Wifi Down:$color $alignr ${downspeed ${ip link | awk -F: '$0 !~ "lo|vir|wl|^[^0-9]"{print $2;getline}'}}
-${color grey}Wifi Up:$color $alignr ${upspeed wlp0s20f3}
-${color grey}UTP Down:$color $alignr ${downspeed enp7s0}
-${color grey}UTP Up:$color $alignr ${upspeed enp7s0}
+${color grey}WiFi Down:$color $alignr ${downspeed WIRELESS_DEVICE_NAME}
+${color grey}WiFi Up:$color $alignr ${upspeed WIRELESS_DEVICE_NAME}
+${color grey}Ethernet Down:$color $alignr ${downspeed ETHERNET_DEVICE_NAME}
+${color grey}Ethernet Up:$color $alignr ${upspeed ETHERNET_DEVICE_NAME}
 ${color grey}External IP: $color $alignr ${execi 1000  wget -q -O- http://ipecho.net/plain; echo}
 #
 # PROCESSES
@@ -131,3 +104,10 @@ ${top name 1} $alignr ${top pid 1}   ${top cpu 1}    ${top mem 1}
 ${top name 2} $alignr ${top pid 2}   ${top cpu 2}    ${top mem 2}
 ${top name 3} $alignr ${top pid 3}   ${top cpu 3}    ${top mem 3}
 ]]
+""".replace(
+    "ETHERNET_DEVICE_NAME", os.popen(R"""ip link | awk -F: '$0 !~ "lo|vir|wl|^[^0-9]"{print $2;getline}'""").read().strip()
+).replace(
+    "WIRELESS_DEVICE_NAME", os.popen(R"""iw dev | awk '$1=="Interface"{print $2}'""").read().strip()
+)
+
+print(contents)

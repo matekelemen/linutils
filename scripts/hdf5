@@ -1,0 +1,4 @@
+#!/bin/bash
+shift
+source loadenv.sh
+python3 -m vitables "$@"

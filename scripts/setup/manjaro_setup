@@ -68,7 +68,9 @@ python3 -m pip install  \
     scipy               \
     numpy               \
     matplotlib          \
-    vispy
+    vispy               \
+    pyqt5		\
+    vitables
 
 # Append PYTHONPATH
 sitePackagesDir=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
