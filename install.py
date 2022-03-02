@@ -64,6 +64,7 @@ def copyFile(source: pathlib.Path, destination: pathlib.Path):
         else:
             print("(skipping)")
     else:
+        destination.parent.mkdir(exist_ok=True, parents=True)
         shutil.copy(str(item), str(destination))
 
 # Copy scripts
@@ -76,7 +77,7 @@ for item in scriptDir.glob("*"):
 # Copy config files
 configProperties = {
     "vscode_settings.json" : {
-        "destinationDirectory" : pathlib.Path.home() / ".config" / "Code - OSS" / "User",
+        "destinationDirectory" : pathlib.Path.home() / ".config" / "Code" / "User",
         "name" : "settings.json"
     },
     "default" : {

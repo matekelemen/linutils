@@ -20,7 +20,7 @@ sudo pacman -S      \
      expect         \
      zip            \
      unzip          \
-     code
+     vim
 
 sudo pacman -S          \
      smplayer           \
@@ -40,10 +40,11 @@ sudo pacman -S      \
      metis
 
 
-sudo yay -S         \
-     trilinos       \
-     yt-dlp         \
-     spotify        \
+yay -S                      \
+     trilinos               \
+     yt-dlp                 \
+     spotify                \
+     visual-studio-code-bin \
      --sudoloop
 
 # Sources
