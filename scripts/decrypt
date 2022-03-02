@@ -4,7 +4,7 @@ set -e
 
 compressedName="$2.zip"
 
-gpg --output $compressedName $1
-unzip $compressedName -d $2
+gpg -d --quiet --output $compressedName $1
+unzip -qq $compressedName -d $2
 
 rm -r $compressedName
