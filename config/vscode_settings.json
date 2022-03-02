@@ -8,5 +8,7 @@
     "python.venvPath": "~/python_venv",
     "files.trimTrailingWhitespace": true,
     "gitlens.hovers.currentLine.over": "line",
-    "gitlens.codeLens.enabled": false
+    "gitlens.codeLens.enabled": false,
+    "editor.bracketPairColorization.enabled" : true,
+    "editor.guides.bracketPairs" : "active"
 }
