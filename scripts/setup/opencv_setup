@@ -8,7 +8,7 @@ mkdir -p $HOME/python_venv
 cd $HOME/python_venv
 
 if ! [ -d opencv ]; then
-    python3 -m venv opencv
+    python3 -m venv opencv --copies
 fi
 
 source opencv/bin/activate
