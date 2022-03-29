@@ -13,7 +13,7 @@ scriptDir  = sourceDir / "scripts"
 configDir  = sourceDir / "config"
 
 # CLI
-parser     = argparse.ArgumentParser(description="Install shell scripts")
+parser = argparse.ArgumentParser(description="Install shell scripts")
 parser.add_argument(
     "installPrefix",
     metavar="install_prefix",
