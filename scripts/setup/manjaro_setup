@@ -19,6 +19,7 @@ sudo pacman -S          \
      zip                \
      unzip              \
      vim                \
+     xclip              \
                         \
      smplayer           \
      telegram-desktop   \
