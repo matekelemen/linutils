@@ -10,5 +10,6 @@
     "gitlens.hovers.currentLine.over": "line",
     "gitlens.codeLens.enabled": false,
     "editor.bracketPairColorization.enabled" : true,
-    "editor.guides.bracketPairs" : "active"
+    "editor.guides.bracketPairs" : "active",
+    "terminal.integrated.fontFamily": "MesloLGS NF"
 }
