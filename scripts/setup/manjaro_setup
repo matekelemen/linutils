@@ -68,7 +68,7 @@ python3 -m pip install  \
 
 # Append PYTHONPATH
 sitePackagesDir=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
-echo "$HOME/build/kratos/Debug/install" >> $sitePackagesDir/pythonpath.pth
+echo "$HOME/git/kratos/build/FullDebug_gcc/install" >> $sitePackagesDir/pythonpath.pth
 echo "$HOME/git/CiE/build/Debug/install/modules" >> $sitePackagesDir/pythonpath.pth
 deactivate
 cd $HOME
