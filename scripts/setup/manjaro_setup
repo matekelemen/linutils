@@ -20,6 +20,7 @@ sudo pacman -S          \
      unzip              \
      vim                \
      xclip              \
+     ttf-meslo-nerd-font-powerlevel10k \
                         \
      smplayer           \
      telegram-desktop   \
