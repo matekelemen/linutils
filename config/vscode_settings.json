@@ -11,5 +11,6 @@
     "gitlens.codeLens.enabled": false,
     "editor.bracketPairColorization.enabled" : true,
     "editor.guides.bracketPairs" : "active",
-    "terminal.integrated.fontFamily": "MesloLGS NF"
+    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "editor.inlayHints.enabled": "offUnlessPressed"
 }
