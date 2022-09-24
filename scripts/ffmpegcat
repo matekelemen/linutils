@@ -1,0 +1,17 @@
+#!/bin/bash
+tmp=$(mktemp)
+trap "rm -f $tmp" 0 2 3 15
+
+for path in "${@:2}"; do
+    if [[ "$path" = /* ]]; then
+        path="$path"
+    else
+        path="$(pwd)/$path"
+    fi
+    echo "file '$path'" >> $tmp
+done
+
+cat "$tmp"
+
+ffmpeg -f concat -safe 0 -i "$tmp" -c copy "$1"
+
