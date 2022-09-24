@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/bin/python
 
 # --- STL Imports ---
 import pathlib
@@ -7,20 +7,20 @@ import sys
 import shutil
 import os
 
-# Get source directory
+# Get source directories
 thisScript = pathlib.Path(__file__).absolute()
 sourceDir  = thisScript.parent
 scriptDir  = sourceDir / "scripts"
 configDir  = sourceDir / "config"
 
 # CLI
-parser = argparse.ArgumentParser(description="Install shell scripts")
+parser = argparse.ArgumentParser(description="Install shell scripts and config files")
 parser.add_argument(
     "installPrefix",
     metavar="install_prefix",
     type=str,
     nargs='?',
-    default=str(pathlib.Path.home() / "bin"),
+    default=str(pathlib.Path.home() / ".local" / "bin"),
     help="destination directory for executable scripts"
 )
 

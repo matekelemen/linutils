@@ -24,12 +24,10 @@ sudo pacman -S          \
                         \
      smplayer           \
      telegram-desktop   \
-     discord            \
                         \
      gnupg              \
      clang              \
      openmp             \
-     openmpi            \
      intel-mkl          \
      boost              \
      metis
@@ -50,33 +48,31 @@ git clone https://github.com/matekelemen/linutils.git
 git clone https://github.com/matekelemen/CiE.git --recursive
 git clone gttps://github.com/KratosMultiphysics/kratos.git --recursive
 
-python3 linutils/install.py
+python linutils/install.py
 
 # Python
 cd $HOME
 mkdir -p python_venv
 cd python_venv
 
-python3 -m venv default --copies
+python -m venv default --copies
 source default/bin/activate
-python3 -m pip install  \
+python -m pip install   \
     scipy               \
     numpy               \
     matplotlib          \
     vispy               \
-    pyqt5		        \
+    pyqt5               \
     vitables
-
-# Append PYTHONPATH
-sitePackagesDir=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
-echo "$HOME/git/kratos/build/FullDebug_gcc/install" >> $sitePackagesDir/pythonpath.pth
-echo "$HOME/git/CiE/build/Debug/install/modules" >> $sitePackagesDir/pythonpath.pth
 deactivate
+
+# Append paths
+echo "export PATH=\$PATH:\$HOME/.local/lib:\$HOME/.local/bin" >> .bash_profile
+echo "export PATH=\$PATH:\$HOME/.local/lib:\$HOME/.local/bin" >> .zprofile
 cd $HOME
 
 # Edit shell config
 echo "alias ll=\"ls -l\"" >> .zshrc
-echo "export PATH=$PATH:$HOME/bin" >> .zshrc
 
 # Costumize KDE
-$HOME/bin/kdebackground $HOME/git/linutils/background/keqing_wallpaper_custom.png
+$HOME/.local/bin/kdebackground $HOME/git/linutils/background/keqing_wallpaper_custom.png
