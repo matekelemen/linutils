@@ -12,5 +12,8 @@
     "editor.bracketPairColorization.enabled" : true,
     "editor.guides.bracketPairs" : "active",
     "terminal.integrated.fontFamily": "MesloLGS NF",
-    "editor.inlayHints.enabled": "offUnlessPressed"
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "C_Cpp.intelliSenseEngine": "Disabled",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "git.terminalAuthentication": false
 }
