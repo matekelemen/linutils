@@ -1,0 +1,57 @@
+#!/bin/bash
+
+set -e
+
+printHelp() {
+    echo "Check whether a local git repository is up-to-date with its remote counterpart."
+    echo "Usage: issynced [OPTIONS]"
+    echo "[-h|d|b|r|q]"
+    echo "h     print help"
+    echo "p     path to the local repo, or a subdirectory inside it (default is the working directory)"
+    echo "b     branch to compare (default is the current branch)"
+    echo "r     remote name (default is 'origin')"
+}
+
+workDir=$(pwd)
+
+# Assign defaults
+repo=$workDir
+verbose=1
+branch=""
+remote="origin"
+
+while getopts ":h:r:b:p:" arg; do
+    case "${arg}" in
+        h)  # Print help and exit
+            printHelp
+            exit 0
+            ;;
+        p)  # Set path to repo
+            repo=${OPTARG}
+            ;;
+        b)  # Set branch name
+            branch=${OPTARG}
+            ;;
+        r)  # Set remote name
+            remote=${OPTARG}
+            ;;
+        \?) # Invalid
+            if [ $verbose ]; then echo "Unrecognized argument: '$arg'"; fi
+            exit 1
+            ;;
+    esac
+done
+
+([ ! -d $repo ] || [ "false" = "$(git rev-parse --is-inside-work-tree &>/dev/null)" ]) && exit 1
+
+if [ "$branch" = "" ]; then
+    cd $repo
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    cd $workDir
+fi
+
+cd $repo
+[ x"$(git rev-parse $branch)" = x"$(git rev-parse $remote/$branch)" ] && echo 1 || echo 0
+cd $workDir
+
+exit 0
