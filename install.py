@@ -1,25 +1,26 @@
-#!/bin/python3
+#!/bin/python
 
 # --- STL Imports ---
 import pathlib
 import argparse
 import sys
 import shutil
+import os
 
-# Get source directory
+# Get source directories
 thisScript = pathlib.Path(__file__).absolute()
 sourceDir  = thisScript.parent
 scriptDir  = sourceDir / "scripts"
 configDir  = sourceDir / "config"
 
 # CLI
-parser = argparse.ArgumentParser(description="Install shell scripts")
+parser = argparse.ArgumentParser(description="Install shell scripts and config files")
 parser.add_argument(
     "installPrefix",
     metavar="install_prefix",
     type=str,
     nargs='?',
-    default=str(pathlib.Path.home() / "bin"),
+    default=str(pathlib.Path.home() / ".local" / "bin"),
     help="destination directory for executable scripts"
 )
 
@@ -41,6 +42,16 @@ parser.add_argument(
     help="overwrite existing files during installation"
 )
 
+parser.add_argument(
+    "-s",
+    "--install-symlinks",
+    dest = "installSymlinks",
+    action = "store_const",
+    default = False,
+    const = True,
+    help = "Create symlinks instead of copying files at install"
+)
+
 # Parse command line arguments
 arguments = parser.parse_args(sys.argv[1:])
 
@@ -51,6 +62,8 @@ configInstallDir = pathlib.Path(arguments.configPrefix).absolute()
 scriptInstallDir.mkdir(parents=True, exist_ok=True)
 configInstallDir.mkdir(parents=True, exist_ok=True)
 
+installFunctor = lambda source, destination: os.symlink(str(source), str(destination)) if arguments.installSymlinks else shutil.copy(str(source), str(destination))
+
 def copyFile(source: pathlib.Path, destination: pathlib.Path):
     if destination.is_dir():
         raise FileExistsError("{} is a directory".format(destination))
@@ -60,12 +73,13 @@ def copyFile(source: pathlib.Path, destination: pathlib.Path):
 
         if arguments.overwrite:
             print("(overwriting)")
-            shutil.copy(str(item), str(destination))
+            os.remove(str(destination))
+            installFunctor(item, destination)
         else:
             print("(skipping)")
     else:
         destination.parent.mkdir(exist_ok=True, parents=True)
-        shutil.copy(str(item), str(destination))
+        installFunctor(item, destination)
 
 # Copy scripts
 for item in scriptDir.glob("*"):
