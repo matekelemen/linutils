@@ -66,13 +66,17 @@ python -m pip install   \
     vitables
 deactivate
 
-# Append paths
-echo "export PATH=\$PATH:\$HOME/.local/lib:\$HOME/.local/bin" >> .bash_profile
-echo "export PATH=\$PATH:\$HOME/.local/lib:\$HOME/.local/bin" >> .zprofile
+# Append paths and configure shell profile
 cd $HOME
-
-# Edit shell config
-echo "alias ll=\"ls -l\"" >> .zshrc
+for profile in ".bash_profile" ".zprofile"; do
+    echo "export PATH=\$PATH:\$HOME/.local/lib:\$HOME/.local/bin" >> $profile
+    echo "export PATH=\$PATH:\$HOME/.local/lib:\$HOME/.local/bin" >> $profile
+    echo "alias ll=\"ls -l\"" >> $profile
+done
 
 # Costumize KDE
+# TODO: KDE and XFCE customization
+#       - theme
+#       - dolphin (especially for XFCE)
+#       - terminal emulator (especially for XFCE)
 $HOME/.local/bin/kdebackground $HOME/git/linutils/background/keqing_wallpaper_custom.png
