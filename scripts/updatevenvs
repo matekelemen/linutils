@@ -4,19 +4,59 @@ set -e
 
 venvDirectory="$HOME/python_venv"
 
+# Collect python executables
+pythonExecutables=()
+for executable in $(find /usr/bin -regex "/.*python[0-9]*\.?[0-9]*"); do
+    pythonExecutables+=( "$executable" )
+done
+
+# Loop through venvs
 if [ -d "$venvDirectory" ]; then
     for venvPath in $(ls -d $venvDirectory/*); do
-        # Load the virtual environment and get the package list
-        source "$venvPath/bin/activate"
-        packages=$(python3 -m pip list --format=freeze --disable-pip-version-check | grep -v "^\-e" | cut -d = -f 1)
-        deactivate
-
         read -r -p "Upgrade virtual environment at \"$venvPath\"? [y/N] " confirm
         if [[ "${confirm,,}" =~ ^(yes|y)$ ]]; then
-            rm -rf "$venvPath"
-            python3 -m venv "$venvPath" --copies
+            # Load virtual environment
             source "$venvPath/bin/activate"
-            python3 -m pip install $packages
+
+            # Find the matching python executable
+            version=$(python --version)
+            pythonExecutable=""
+            for executable in $pythonExecutables; do
+                if [[ "$version" == $($executable --version) ]]; then
+                    pythonExecutable="$executable"
+                    break
+                fi
+            done
+
+            while [[ ! -f "$pythonExecutable" ]]; do
+                echo "Python version not found: $version!"
+                read -r -p "Provide a path to the matching python executable: " pythonExecutable
+
+                if [[ "$version" != $($pythonExecutable --version) ]]; then
+                    providedVersion=$($pythonExecutable --version)
+                    echo
+                    read -r -p "The provided python version ($providedVersion) does not match that of the venv ($version). Continue? [y/N] " confirm
+                    if [[ "${confirm,,}" =~ ^(yes|y)$ ]]; then
+                        break
+                    fi
+                fi
+            done
+
+            pythonExecutable=$(realpath "$pythonExecutable")
+
+            # Load the virtual environment and get the package list
+            packages=$(python -m pip list --format=freeze --disable-pip-version-check | grep -v "^\-e" | cut -d = -f 1)
+            deactivate
+
+            # Remove venv
+            rm -rf "$venvPath"
+
+            # Fresh new venv
+            $pythonExecutable -m venv "$venvPath" --copies
+
+            # Install packages
+            source "$venvPath/bin/activate"
+            python -m pip install $packages
             deactivate
         fi
     done
