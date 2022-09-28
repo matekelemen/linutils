@@ -1,0 +1,2 @@
+#compdef penv
+_alternative "venv:python virtual environment name:(for p in "$HOME/python_venv/"*; do; echo $(basename "$p"); done)"
