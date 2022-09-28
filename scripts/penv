@@ -1,4 +1,5 @@
-#!/bin/bash
+# No shebang because this needs to be run from
+# the user's shell with "source".
 
 environmentName="default"
 
