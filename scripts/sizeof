@@ -1,6 +1,5 @@
 #!/bin/bash
 
-for argument in "$@"
-do
+for argument in "$@"; do
     echo $(du -hs "$argument")
 done

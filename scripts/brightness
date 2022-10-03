@@ -1,2 +1,4 @@
 #!/bin/bash
+# Set laptop brightness on shitty NVidia drivers.
+
 xrandr --output  DP-2 --brightness $1

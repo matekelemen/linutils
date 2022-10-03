@@ -1,4 +1,5 @@
 #!/bin/bash
+
 shift
-source loadenv.sh
+source penv
 python3 -m vitables "$@"

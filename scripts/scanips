@@ -10,4 +10,3 @@ for range in $ranges; do
         (ping $range.$i -c 1 -w 5  >/dev/null && echo "$range.$i" &) ;
     done
 done
-

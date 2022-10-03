@@ -20,7 +20,7 @@ verbose=1
 branch=""
 remote="origin"
 
-while getopts ":h:r:b:p:" arg; do
+while getopts "hr:b:p:" arg; do
     case "${arg}" in
         h)  # Print help and exit
             printHelp
