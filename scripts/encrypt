@@ -1,49 +1,56 @@
 #!/bin/bash
 
-set -e
+#set -e
 
-# Get target and source directories
-sourceDirectory="$(dirname $(realpath "$1"))"
-targetDirectory="$(dirname $(realpath "$2"))"
-currentDirectory="$PWD"
+printHelp() {
+    echo "Compress and encrypt a file or directory with zip and gpg."
+    echo "Usage: encrypt [OPTIONS]"
+    echo "[-h|i:]"
+    echo "h     : print help and exit"
+    echo "i     : path to input file/direcrory (default is stdin)"
+}
 
-sourceName="$(basename "$1")"
-sourceName="$sourceDirectory/$sourceName"
+isKeyActive=0
+for arg in "$@"; do
+    if [[ "$arg" == -* ]]; then
+        isKeyActive=1
+    else
+        if [ $isKeyActive = 0 ]; then
+            echo "Positional arugments are not supported! (${arg})"
+            printHelp
+            exit 1
+        else
+            isKeyActive=0
+        fi
+    fi
+done
 
-targetName="$(basename "$2")"
-targetName="$targetDirectory/$targetName"
+input="-"
 
-# Define compressed output name and check whether it exists
-compressedName="$sourceName.zip"
+while getopts "hi:" arg; do
+    case "${arg}" in
+        h)  # Print help and exit
+            printHelp
+            exit 0
+            ;;
+        i)  # Set input path
+            input="${OPTARG}"
+            if [[ ( "${input}" != "-" ) && ( ! -f "${input}" ) && ( ! -d "${input}" ) ]]; then
+                echo "File not found: ${input}"
+                exit 2
+            fi
+            ;;
+        \?) # Invalid argument
+            "Unrecognized argument: ${OPTARG}"
+            exit 3
+            ;;
+    esac
+done
 
-if [ -d "$compressedName" ] || [ -f "$compressedName" ]; then
-    echo -e "\e[1;31m '$compressedName' already exists! \e[0m"
-    exit
+encryptInstruction="gpg --symmetric --no-symkey-cache --cipher-algo AES256"
+
+if [ -d "$input" ]; then
+    zip -qq -r - "$input"/* | $encryptInstruction
+else
+    zip -qq -r - "$input" | $encryptInstruction
 fi
-
-# Define encoded name and check whether it exists
-encodedName=$targetName
-
-if [ -d "$encodedName" ] || [ -f "$encodedName" ]; then
-    echo -e "\e[1;31m '$encodedName' already exists! \e[0m"
-    exit
-fi
-
-# Compress
-cd $sourceDirectory
-
-if [ -d "$1" ]; then
-    zip -r $compressedName $(basename "$1")/*
-elif [ -f "$1" ]; then
-    zip -r $compressedName $(basename "$1")
-fi
-
-cd $targetDirectory
-
-# Encode
-gpg -c --no-symkey-cache --cipher-algo AES256 --output $encodedName $compressedName
-
-# Remove intermediate files
-rm $compressedName
-
-echo -e "\e[1;31m Generated password protected $encodedName \e[0m"

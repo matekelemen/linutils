@@ -2,9 +2,23 @@
 
 set -e
 
-compressedName="$2.zip"
+printHelp() {
+    echo "Decrypt an encrypted file/directory using gpg and a password."
+    echo "Usage: decrypt input output"
+    echo "input     : path to the encrypted item"
+}
 
-gpg -d --quiet --output $compressedName $1
-unzip -qq $compressedName -d $2
+input="-"
+if [ "$#" = 1 ]; then
+    input="$1"
+    if [ "$input" != "-" ] && [ ! -f "$input" ]; then
+        echo "File not found: $input"
+        exit 1
+    fi
+elif [ 1 -lt "$#" ]; then
+    echo "decrypt takes at most 1 argument, but $# were given."
+    printHelp
+    exit 1
+fi
 
-rm -r $compressedName
+gpg -d --quiet "$input" | zcat
