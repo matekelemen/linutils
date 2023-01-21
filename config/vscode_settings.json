@@ -15,5 +15,8 @@
     "editor.inlayHints.enabled": "offUnlessPressed",
     "C_Cpp.intelliSenseEngine": "Disabled",
     "diffEditor.ignoreTrimWhitespace": false,
-    "git.terminalAuthentication": false
+    "git.terminalAuthentication": false,
+    "explorer.confirmDragAndDrop": false,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "haskell.manageHLS": "GHCup"
 }
