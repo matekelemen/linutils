@@ -16,7 +16,7 @@ for arg in "$@"; do
         isKeyActive=1
     else
         if [ $isKeyActive = 0 ]; then
-            echo "Positional arugments are not supported! (${arg})"
+            echo "Positional arguments are not supported! (${arg})"
             printHelp
             exit 1
         else

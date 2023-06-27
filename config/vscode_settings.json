@@ -20,5 +20,7 @@
     "[python]": {
         "editor.formatOnType": true
     },
-    "debug.onTaskErrors": "abort"
+    "debug.onTaskErrors": "abort",
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "haskell.manageHLS": "GHCup"
 }
