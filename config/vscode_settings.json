@@ -15,5 +15,10 @@
     "editor.inlayHints.enabled": "offUnlessPressed",
     "C_Cpp.intelliSenseEngine": "Disabled",
     "diffEditor.ignoreTrimWhitespace": false,
-    "git.terminalAuthentication": false
+    "git.terminalAuthentication": false,
+    "explorer.confirmDragAndDrop": false,
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "debug.onTaskErrors": "abort"
 }
