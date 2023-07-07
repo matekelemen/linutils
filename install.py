@@ -1,11 +1,12 @@
-#!/bin/python
+#!/bin/python3
 
-# --- STL Imports ---
+# --- STD Imports ---
 import pathlib
 import argparse
 import sys
 import shutil
 import os
+import platform
 
 # Get source directories
 thisScript      = pathlib.Path(__file__).absolute()
@@ -93,7 +94,9 @@ for sourcePrefix, destinationPrefix in ((scriptDir, scriptInstallDir), (autocomp
 # Copy config files
 configProperties = {
     "vscode_settings.json" : {
-        "destinationDirectory" : pathlib.Path.home() / ".config" / "Code" / "User",
+        "destinationDirectory" : pathlib.Path.home() / ".config" / "Code" / "User" if platform.system() == "Linux" \
+                                 else pathlib.Path.home() / "Library" / "Application\ Support" / "Code" / "User" if platform.system() == "Darwin" \
+                                 else configInstallDir,
         "name" : "settings.json"
     },
     "default" : {
