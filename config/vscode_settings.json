@@ -18,6 +18,10 @@
     "diffEditor.ignoreTrimWhitespace": false,
     "git.terminalAuthentication": false,
     "explorer.confirmDragAndDrop": false,
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "debug.onTaskErrors": "abort",
     "terminal.integrated.enableMultiLinePasteWarning": false,
     "haskell.manageHLS": "GHCup"
 }
