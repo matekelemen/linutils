@@ -22,5 +22,8 @@
     },
     "debug.onTaskErrors": "abort",
     "terminal.integrated.enableMultiLinePasteWarning": false,
-    "haskell.manageHLS": "GHCup"
+    "haskell.manageHLS": "GHCup",
+    "files.associations": {
+        "*.xdmf": "html"
+    }
 }
