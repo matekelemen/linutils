@@ -1,6 +1,7 @@
 {
     "workbench.colorTheme" : "Default Dark+",
     "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.defaultProfile.osx": "zsh",
     "editor.minimap.enabled": false,
     "editor.detectIndentation": false,
     "editor.renderWhitespace": "all",
