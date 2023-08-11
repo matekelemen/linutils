@@ -117,7 +117,7 @@ for item in configDir.glob("*"):
         destination = properties["destinationDirectory"] / properties["name"]
         copyFile(item, destination)
 
-    path = [pathlib.path(p) for p in os.environ.get("PATH", "").split(":")]
+    path = [pathlib.Path(p) for p in os.environ.get("PATH", "").split(":")]
     if not pathlib.Path.home() in path:
         for shellConfigName in (".bashrc", ".zshrc"):
             with open(pathlib.Path.home() / shellConfigName, "a") as shellConfigFile:
