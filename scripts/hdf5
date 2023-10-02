@@ -1,6 +1,6 @@
 #!/bin/bash
 
 shift
-source vitables
+source penv vitables
 python3 -m vitables "$@"
 
