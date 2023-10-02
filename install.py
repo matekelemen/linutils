@@ -121,4 +121,4 @@ for item in configDir.glob("*"):
     if not pathlib.Path.home() / ".local" / "bin"  in path:
         for shellConfigName in (".bashrc", ".zshrc"):
             with open(pathlib.Path.home() / shellConfigName, "a") as shellConfigFile:
-                shellConfigFile.write(f"\nexport PATH=$PATH:{pathlib.Path.home() / '.local' / 'bin'}\n")
+                shellConfigFile.write(f"\nexport PATH=\"$PATH:{pathlib.Path.home() / '.local' / 'bin'}\"\n")
