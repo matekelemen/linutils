@@ -1,6 +1,7 @@
 {
     "workbench.colorTheme" : "Default Dark+",
     "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.defaultProfile.osx": "zsh",
     "editor.minimap.enabled": false,
     "editor.detectIndentation": false,
     "editor.renderWhitespace": "all",
@@ -17,6 +18,13 @@
     "diffEditor.ignoreTrimWhitespace": false,
     "git.terminalAuthentication": false,
     "explorer.confirmDragAndDrop": false,
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "debug.onTaskErrors": "abort",
     "terminal.integrated.enableMultiLinePasteWarning": false,
-    "haskell.manageHLS": "GHCup"
+    "haskell.manageHLS": "GHCup",
+    "files.associations": {
+        "*.xdmf": "html"
+    }
 }

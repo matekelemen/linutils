@@ -4,7 +4,7 @@ set -e
 
 printHelp() {
     echo "Decrypt an encrypted file/directory using gpg and a password."
-    echo "Usage: decrypt input output"
+    echo "Usage: decrypt input"
     echo "input     : path to the encrypted item"
 }
 
@@ -21,4 +21,12 @@ elif [ 1 -lt "$#" ]; then
     exit 1
 fi
 
-gpg -d --quiet "$input" | zcat
+os=$(uname -s)
+if [ "$os" == "Linux" ]; then
+    gpg -d --quiet "$input" | zcat
+elif [ "$os" == "Darwin" ]; then
+    gpg -d --quiet "$input" | bsdtar -xO -f -
+else
+    echo "Unknown OS: $os"
+    exit 1
+fi
