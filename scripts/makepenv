@@ -1,0 +1,7 @@
+#!/bin/bash
+
+venvDirectory="${HOME}/python_venv"
+pythonCommand="python"
+
+cd "${venvDirectory}"
+$pythonCommand -m venv $1 --copies
