@@ -1,5 +1,12 @@
 #!/bin/bash
 
-for argument in "$@"; do
-    echo $(du -hs "$argument")
-done
+entries=()
+
+sizeof_unsorted() {
+	for arg in "$@"; do
+		du -hs "$arg"
+	done
+}
+
+sizeof_unsorted "$@" | sort -rh
+

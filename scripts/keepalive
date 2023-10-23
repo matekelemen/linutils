@@ -1,6 +1,7 @@
 #!/bin/bash
 
 while :; do
-    sleep 1
-    touch /dev/video2
+    sleep 0.1
+    touch /dev/video0
+    touch /dev/video1
 done
