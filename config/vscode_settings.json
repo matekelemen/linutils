@@ -26,5 +26,6 @@
     "haskell.manageHLS": "GHCup",
     "files.associations": {
         "*.xdmf": "html"
-    }
+    },
+    "terminal.external.osxExec": "kitty.app"
 }
