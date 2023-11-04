@@ -21,12 +21,4 @@ elif [ 1 -lt "$#" ]; then
     exit 1
 fi
 
-os=$(uname -s)
-if [ "$os" == "Linux" ]; then
-    gpg -d --quiet "$input" | zcat
-elif [ "$os" == "Darwin" ]; then
-    gpg -d --quiet "$input" | bsdtar -xO -f -
-else
-    echo "Unknown OS: $os"
-    exit 1
-fi
+gpg -d --quiet "$input" | bsdtar -xO -f -
