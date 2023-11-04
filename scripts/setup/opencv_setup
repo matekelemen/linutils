@@ -1,5 +1,7 @@
  #!/bin/bash
 
+set -e
+
 THIS_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 SCRIPT_DIR="$(dirname "$THIS_DIR")"
 UTILS_DIR="$SCRIPT_DIR/utils"

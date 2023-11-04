@@ -49,6 +49,10 @@ done
 
 encryptInstruction="gpg --symmetric --no-symkey-cache --cipher-algo AES256"
 
+if [ "$(uname -s)" = "Darwin" ]; then
+    export GPG_TTY="$(tty)"
+fi
+
 if [ -d "$input" ]; then
     zip -qq -r - "$input"/* | $encryptInstruction
 else

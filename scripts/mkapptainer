@@ -1,0 +1,77 @@
+#!/bin/bash
+
+scriptName="$(basename ${BASH_SOURCE[0]})"
+
+printHelp() {
+    echo "Usage: $scriptName -i path_to_apptainer_def_file [options [arguments]]"
+    echo "-h                              : print this help and exit"
+    echo "-i path_to_apptainer_def_file   : path to the definition to build"
+    echo "-t temporary_directory          : path to use as a temporary directory to build the image in"
+    echo "-o output_file_name             : name of the output image"
+}
+
+# Default arguments
+definitionFile=""
+defaultTmpDir=".apptainer_tmpdir"
+tmpDir="$defaultTmpDir"
+outputFile=""
+
+while getopts ":h i: t: o:" arg; do
+  case "$arg" in
+    h)  # Print help and exit
+        printHelp
+        exit 0
+        ;;
+    i)  # Set definition file
+        definitionFile="$OPTARG"
+        ;;
+    t)  # Set temporary directory
+        tmpDir="$OPTARG"
+        ;;
+    o)  # Set the output image name
+        outputFile="$OPTARG"
+        ;;
+    \?) # Unrecognized argument
+        echo "Error: unrecognized argument: $OPTARG"
+        exit 1
+  esac
+done
+
+if ! [ -f "$definitionFile" ]; then
+  echo "Error: definition file not found: '$definitionFile'"
+  exit 1
+fi
+
+# Generate output file name if it wasn't given
+if [ "$outputFile" = "" ]; then
+  definitionDir="$( cd -- "$( dirname -- "${definitionFile}" )" &> /dev/null && pwd )"
+  definitionName=$(basename -- "$definitionFile")
+  definitionName="${definitionName%.*}"
+  outputFile="${definitionDir}/${definitionName}.sif"
+fi
+
+tmpDir=$(realpath "$tmpDir")
+if [ -d "$tmpDir" ]; then                                           # <== tmp dir already exists
+  if [ "$tmpDir" = "$defaultTmpDir" ]; then
+    rm -rf "$tmpDir"                                                # <== remove the tmp dir if it's the default one
+  else
+    echo "Error: temporary directory already exists: '$tmpDir'"
+    exit 1                                                          # <== error if the tmp dir exists but isn't the default
+  fi
+fi
+
+if ! mkdir -p "$tmpDir"; then
+  echo "Error: failed to create temporary directory: '$tmpDir'"
+  exit 1
+fi
+
+trap "rm -rf $tmpDir" 0 2 3 15
+
+export APPTAINER_TMPDIR="$tmpDir"
+
+if ! apptainer build "$outputFile" "$definitionFile"; then
+  echo "Error: apptainer failed to build image"
+  exit 1
+fi
+
+exit 0
