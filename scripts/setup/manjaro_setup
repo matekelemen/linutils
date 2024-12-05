@@ -21,6 +21,7 @@ sudo pacman -S          \
      vim                \
      xclip              \
      ttf-meslo-nerd-font-powerlevel10k \
+     neovim             \
                         \
      smplayer           \
      telegram-desktop   \
@@ -29,10 +30,10 @@ sudo pacman -S          \
      clang              \
      openmp             \
      intel-mkl          \
-     boost              \
-     metis
+     boost
 
 yay -S                      \
+     metis-git              \
      trilinos               \
      yt-dlp                 \
      spotify                \
@@ -45,8 +46,8 @@ mkdir -p git build
 
 cd git
 git clone https://github.com/matekelemen/linutils.git
-git clone https://github.com/matekelemen/CiE.git --recursive
-git clone gttps://github.com/KratosMultiphysics/kratos.git --recursive
+git clone https://github.com/kelofm/cie.git --recursive
+git clone gttps://github.com/matekelemen/krex.git --recursive
 
 python linutils/install.py
 
@@ -68,8 +69,7 @@ deactivate
 
 # Append paths and configure shell profile
 cd $HOME
-for profile in ".bash_profile" ".zprofile"; do
-    echo "export PATH=\$PATH:\$HOME/.local/lib:\$HOME/.local/bin" >> $profile
+for profile in ".bash_profile" ".zprofile" ".zshrc"; do
     echo "export PATH=\$PATH:\$HOME/.local/lib:\$HOME/.local/bin" >> $profile
     echo "alias ll=\"ls -l\"" >> $profile
 done
@@ -79,4 +79,4 @@ done
 #       - theme
 #       - dolphin (especially for XFCE)
 #       - terminal emulator (especially for XFCE)
-$HOME/.local/bin/kdebackground $HOME/git/linutils/background/keqing_wallpaper_custom.png
+#$HOME/.local/bin/kdebackground $HOME/git/linutils/background/keqing_wallpaper_custom.png
