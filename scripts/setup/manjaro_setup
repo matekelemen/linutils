@@ -10,6 +10,7 @@ sudo pacman -S          \
                         \
      git                \
      cmake              \
+     ninja              \
      base-devel         \
      ccache             \
      gcc                \
