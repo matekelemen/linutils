@@ -95,7 +95,7 @@ for sourcePrefix, destinationPrefix in ((scriptDir, scriptInstallDir), (autocomp
 configProperties = {
     "vscode_settings.json" : {
         "destinationDirectory" : pathlib.Path.home() / ".config" / "Code" / "User" if platform.system() == "Linux" \
-                                 else pathlib.Path.home() / "Library" / "Application\ Support" / "Code" / "User" if platform.system() == "Darwin" \
+                                 else pathlib.Path.home() / "Library" / r"Application\ Support" / "Code" / "User" if platform.system() == "Darwin" \
                                  else configInstallDir,
         "name" : "settings.json"
     },
