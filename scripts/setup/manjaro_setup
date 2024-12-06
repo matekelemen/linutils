@@ -10,6 +10,7 @@ sudo pacman -S          \
      openssh            \
                         \
      git                \
+     git-lfs            \
      cmake              \
      ninja              \
      base-devel         \
@@ -32,7 +33,10 @@ sudo pacman -S          \
      clang              \
      openmp             \
      intel-mkl          \
-     boost
+     boost              \
+     hdf5-openmpi       \
+     med-openmpi        \
+     paraview
 
 yay -S                      \
      metis-git              \
@@ -83,4 +87,4 @@ done
 #       - theme
 #       - dolphin (especially for XFCE)
 #       - terminal emulator (especially for XFCE)
-#$HOME/.local/bin/kdebackground $HOME/git/linutils/background/keqing_wallpaper_custom.png
+$HOME/.local/bin/kdebackground $HOME/git/linutils/background/keqing_wallpaper_custom.png
