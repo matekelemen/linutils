@@ -11,6 +11,7 @@ sudo pacman -S          \
                         \
      git                \
      cmake              \
+     ninja              \
      base-devel         \
      ccache             \
      gcc                \
@@ -66,9 +67,8 @@ python -m pip install   \
     scipy               \
     numpy               \
     matplotlib          \
-    vispy               \
     pyqt5               \
-    vitables
+    mypy
 deactivate
 
 # Append paths and configure shell profile
