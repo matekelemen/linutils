@@ -19,6 +19,8 @@ sudo pacman -S          \
      valgrind           \
      gdb                \
      expect             \
+     doxygen            \
+     graphviz           \
      zip                \
      unzip              \
      vim                \
@@ -28,6 +30,8 @@ sudo pacman -S          \
                         \
      smplayer           \
      telegram-desktop   \
+     krita              \
+     wacomtablet        \
                         \
      gnupg              \
      clang              \
