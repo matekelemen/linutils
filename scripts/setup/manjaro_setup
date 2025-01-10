@@ -27,6 +27,7 @@ sudo pacman -S          \
      xclip              \
      ttf-meslo-nerd-font-powerlevel10k \
      neovim             \
+     ripgrep            \
                         \
      smplayer           \
      telegram-desktop   \
